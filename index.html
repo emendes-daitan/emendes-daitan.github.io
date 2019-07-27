@@ -1,0 +1,199 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Hangouts Chatbot Basic</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="hangouts-bot"
+                  title="Hangouts Chatbot Basic"
+                  environment="web"
+                  feedback-link="https://github.com/emendes-daitan">
+    
+      <google-codelab-step label="Introdução" duration="0">
+        <p>Este documento tem a intenção de fazer o setup básico para um novo Hangout Chat Bot baseado em Google Apps Script + Dialog Flow.</p>
+<h2 is-upgraded><strong>Dicas Iniciais</strong></h2>
+<p>Deslogue de todas as contas do google e deixa somente a da Daitan para evitar ter que ficar trocando de conta sempre que abrir uma nova página.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Setup" duration="20">
+        <h2 is-upgraded><strong>Google Cloud SDK</strong></h2>
+<p>Siga os passos <a href="https://cloud.google.com/sdk/docs/quickstarts" target="_blank">aqui </a>para instalar o Cloud SDK. </p>
+<aside class="special"><p><strong>Note:</strong> No processo de instalação crie um novo projeto Google Cloud para ser utilizado no processo.</p>
+</aside>
+<h2 is-upgraded><strong>Requisitos</strong></h2>
+<ul>
+<li>Git</li>
+<li><a href="https://nodejs.org/en/" target="_blank">NodeJs</a></li>
+</ul>
+<h2 is-upgraded><strong>Clasp</strong></h2>
+<p>Instale o clasp (Apps script CLI). </p>
+<pre><code>npm install @google/clasp -g
+clasp login</code></pre>
+<aside class="special"><p><strong>Note:</strong> Se ele reclamar que não encontrou o &#39;clasp&#39; tente:</p>
+<p><code>npm install @google/clasp</code></p>
+<p><code>export PATH=$PATH:${HOME}/node_modules/.bin</code></p>
+<p><code>clasp login</code></p>
+</aside>
+<h2 is-upgraded><strong>GAS API</strong></h2>
+<p><a href="https://script.google.com/home/usersettings" target="_blank"><paper-button class="colored" raised>Ative a API do Google Apps Script</paper-button></a></p>
+<aside class="special"><p><strong>Note:</strong> Se tiver mais de uma conta ativada lembre-se de alterar para a conta que está utilizando..</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Criar scripts" duration="5">
+        <p>Faça uma cópia do template base</p>
+<p><a href="https://script.google.com/a/daitan.com/d/1H2yyL6-cJ0bcgRSEQjnw73J1VgLIs7SV7X0wYPTG4xKYpXXFNZxp6C_5/edit?usp=sharing" target="_blank"><paper-button class="colored" raised>Acesse o Template</paper-button></a></p>
+<h3 is-upgraded><strong>Set Project</strong></h3>
+<p><code>Resources &gt; Cloud Platform &gt; Change Project &gt; &#34;Enter Project Number here&#34;</code></p>
+<aside class="special"><p><strong>Dica</strong>: Para obter o <code>Project Number</code> vá neste <a href="https://console.cloud.google.com/cloud-resource-manager" target="_blank">link </a> clique nas 3 bolinhas na direita,  selecione &#39;Settings&#39; e então copie o &#34;Project Number&#34;</p>
+</aside>
+<h2 is-upgraded><strong>Abra o script localmente</strong></h2>
+<p>Copie o <code>scriptID </code></p>
+<p><code>File &gt; Project properties &gt; Info</code></p>
+<pre><code>clasp clone &lt;scriptId&gt;</code></pre>
+<aside class="special"><p><strong>Note:</strong> Após qualquer alteração que você fizer no arquivo localmente você pode enviar as mudanças para o GAS utilizando o comando <code>clasp push</code> e carregar alterações que estejam no GAS utilizando <code>clasp pull</code></p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="DialogFlow" duration="10">
+        <p>O DialogFlow é que fará a interpretação de linguagem natural do bot</p>
+<h2 is-upgraded><strong>Criar Agent</strong></h2>
+<ol type="1" start="1">
+<li>Acesse o <a href="https://console.dialogflow.com/" target="_blank">Console do Dialogflow</a>.</li>
+<li>Se solicitado, faça login no console do Dialogflow.</li>
+<li>Clique em <strong>Criar Agente</strong> no menu à esquerda. Se você já tiver outros agentes, clique no nome do agente, role até a parte inferior e clique em <strong>Criar novo agente</strong>.</li>
+</ol>
+<aside class="special"><p><strong>Note:</strong> Você deve utilizar o mesmo projeto do Google Cloud criado anteriormente</p>
+</aside>
+<h2 is-upgraded><strong>Intent Teste</strong></h2>
+<p>Vamos criar um intent de teste para indicar ao nosso script que a resposta do usuário quem deve tratar é o script com uma ação específica .</p>
+<h3 is-upgraded><strong>Criar Intent</strong></h3>
+<p>Se Intents não estiver selecionado no menu da barra lateral esquerda, clique em <strong><em>Intents</em></strong></p>
+<p>No meio do console, será exibida a lista de intents padrão do agente: O agente corresponderá à <strong>intent de fallback padrão</strong> quando não for capaz de processar a fala dos usuários. A <strong>intent de boas-vindas padrão</strong> é uma saudação aos usuários.</p>
+<h2 is-upgraded><img style="width: 624.00px" src="img\4fcd46aeb28c09d9.png"></h2>
+<p>Clique então em <strong><em>CREATE INTENT</em></strong></p>
+<p>Estando na tela da Intent defina um <em>Intent Name</em> qualquer.</p>
+<aside class="special"><p><strong>Note:</strong> Caso você não queira que seu bot utilize as respostas básicas basta você excluir os intents de boas-vindas e de fallback padrão.</p>
+</aside>
+<h3 is-upgraded><strong>Adicionar frases</strong></h3>
+<p>Vamos agora adicionar algumas frases que queremos que o DialogFlow reconheça para esse Intent</p>
+<p class="image-container"><img style="width: 624.00px" src="img\f753bd78a534724a.png"></p>
+<aside class="special"><p><strong>Note:</strong> Essas são as frases que se enviarmos para o bot ele vai reconhecer e responder utilizando nosso script.</p>
+</aside>
+<h3 is-upgraded><strong>Adicionar Action</strong></h3>
+<p>Na área de <em>Actions and parameters </em> defina um <em>PARAMETER NAME </em> como <strong>&#34;action&#34; </strong> e um <em>VALUE </em>como &#34;test-action&#34; </p>
+<p class="image-container"><img style="width: 624.00px" src="img\5c400204f0e0d290.png"></p>
+<aside class="special"><p><strong>Note:</strong> Action será a chave do parâmetro que vamos receber no nosso script e test-action o valor</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Autorizar Script" duration="15">
+        <h3 is-upgraded><strong>Criar Service Account</strong></h3>
+<p>Siga a documentação do Dialogflow em <a href="https://dialogflow.com/docs/reference/v2-auth-setup#getting_the_service_account_key" target="_blank">Getting the Service Account key</a></p>
+<aside class="special"><p><strong>Importante</strong>: quando for adicionar Roles para sua service account você precisa adicionar ao menos Dialogflow API Client.</p>
+</aside>
+<aside class="special"><p><strong>Note: </strong>Se estiver logado com várias contas no Google preste atenção pois ao abrir o console do Google ele vai abrir com sua conta principal e não com a conta secundária, caso esteja montando o ambiente de teste nela</p>
+</aside>
+<h3 is-upgraded><strong>Definir uso da Chave</strong></h3>
+<p>Envie sua recém criada JSON key para a raiz do Google Drive (verifique se é a mesma conta que utilizou nas outras etapas, isso será temporário até finalizar a configuração do OAuth 2).</p>
+<p>Abra o arquivo <em>config.js</em> e edite as configurações</p>
+<pre><code>    Project_id: &lt;PROJECT_ID&gt;,
+    auth_file: &#39;NAME_OF_YOUR_JSON_KEY_FILE.json&#39;,</code></pre>
+<aside class="special"><p><strong>Dica</strong>: Lembrar de enviar as alterações com clasp push</p>
+</aside>
+<aside class="special"><p><strong>Dica</strong>: Para obter o PROJECT_ID vá neste <a href="https://console.cloud.google.com/cloud-resource-manager" target="_blank">link </a> clique nas 3 bolinhas na direita, e selecione &#39;Settings&#39; e então copie o &#34;Project Number&#34;</p>
+</aside>
+<h3 is-upgraded><strong>Função de Autorização</strong></h3>
+<ol type="1" start="1">
+<li>Abra seu script no editor do Google Apps Script</li>
+<li>Selecione o arquivo authDialog</li>
+<li>Rode a função authDialog()</li>
+</ol>
+<aside class="special"><p><strong>Dica</strong>: Se der algum erro referente a não localizar o &#39; cGoa.GoaApp.setPackage&#39; verifique o arquivo &#39;appscript.json&#39; se ele está com o mesmo conteúdo do repositório pois dependo da ordem de execução dos comandos ele pode ter sido sobrescrito</p>
+</aside>
+<aside class="special"><p><strong>Dica</strong>: Você agora pode apagar o arquivo do Google Drive</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Deploy do Script" duration="1">
+        <p>O Apps Script realiza versionamento dos códigos, podendo gerar várias versões para deploy. Vamos então criar uma versão que iremos utilizar no nosso chat bot</p>
+<ol type="1" start="1">
+<li>Abra seu script no editor do Google Apps Script</li>
+<li>Clique em Publish -&gt; Deploy from manifest -&gt; Get ID -&gt; Deployment ID</li>
+<li>Guarde este  Deployment ID</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Hangouts Chat Bot" duration="8">
+        <p><a href="https://console.developers.google.com/apis/dashboard" target="_blank"><paper-button class="colored" raised>Acesse API &amp; Services</paper-button></a></p>
+<ul>
+<li>Selecione o projeto na parte superior esquerda</li>
+<li>Clique &#34;+ ENABLE APIS AND SERVICES&#34;</li>
+<li>Busque por &#34;Hangouts Chat API&#34;</li>
+<li>Clique &#34;ENABLE&#34;</li>
+<li>Clique &#34;Configuration&#34;</li>
+<li>Coloque as informações básicas. Coloque um nome que saiba reconhecer como de teste</li>
+<li>Selecione ambas as opções em &#34;Functionality&#34;</li>
+<li>Em &#34;Connection settings&#34; selecione &#34;Apps Script project&#34; e coloque o Deployment ID do seu script</li>
+<li>[IMPORTANT] Em &#34;permissions&#34; selecione &#34;Specific people and groups in your domain&#34; e coloque seu email</li>
+<li>Clique em &#34;SAVE&#34;</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Testando o Bot" duration="2">
+        <p>Abra o Hangouts Chat</p>
+<p>Selecione a barra de busca no topo superior esquerdo &#34;Encontrar pessoas, sala e bots&#34;.</p>
+<p>Busque pelo nome do seu bot.</p>
+<p>Ao adicionar seu bot ele enviará uma mensagem para você &#34;Olá mundo!&#34;</p>
+<p>Se você mandar uma mensagem para ele &#34;Teste&#34; ele deve responder com &#34;Teste via script&#34;</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Parabéns" duration="0">
+        <p>Parabéns, você finalizou com sucesso a configuração do Hangouts Chat Bot utilizando Google Apps Script e DialogFlow</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
